@@ -2,6 +2,9 @@
 
 package com.github.piotrtomiak.symbolsapiworkshop
 
+import com.intellij.find.usages.api.SearchTarget
+import com.intellij.find.usages.api.UsageHandler
+import com.intellij.icons.AllIcons
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.model.Pointer
 import com.intellij.model.Symbol
@@ -11,12 +14,26 @@ import com.intellij.platform.backend.navigation.NavigationRequest
 import com.intellij.platform.backend.navigation.NavigationTarget
 import com.intellij.platform.backend.presentation.TargetPresentation
 import com.intellij.psi.createSmartPointer
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.SearchScope
 import com.intellij.webSymbols.utils.createPsiRangeNavigationItem
 
 data class CypressAliasSymbol(
     val name: String,
     private val declaration: JSLiteralExpression,
-) : Symbol, NavigatableSymbol {
+) : Symbol, SearchTarget, NavigatableSymbol {
+
+    override val usageHandler: UsageHandler
+        get() = UsageHandler.createEmptyUsageHandler(name)
+
+    override val maximalSearchScope: SearchScope =
+        computeScopeOfAliasDeclaration(declaration)?.let { LocalSearchScope(it) }
+            ?: LocalSearchScope.EMPTY
+
+    override fun presentation(): TargetPresentation =
+        TargetPresentation.builder("Cypress Alias $name")
+            .icon(AllIcons.Nodes.Alias)
+            .presentation()
 
     override fun createPointer(): Pointer<CypressAliasSymbol> {
         val name = name
@@ -25,7 +42,6 @@ data class CypressAliasSymbol(
             CypressAliasSymbol(name, declarationPtr.dereference() ?: return@Pointer null)
         }
     }
-
     override fun getNavigationTargets(project: Project): Collection<NavigationTarget> =
         listOf(MyNavigationTarget(this))
 
@@ -38,8 +54,7 @@ data class CypressAliasSymbol(
         }
 
         override fun computePresentation(): TargetPresentation =
-            TargetPresentation.builder("Cypress Alias ${symbol.name}")
-                .presentation()
+            symbol.presentation()
 
         override fun navigationRequest(): NavigationRequest? =
             createPsiRangeNavigationItem(symbol.declaration, 1).navigationRequest()

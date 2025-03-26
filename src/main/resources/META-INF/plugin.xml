@@ -22,6 +22,9 @@
                 referenceClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolReference"/>
         <psi.declarationProvider
                 implementation="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolDeclarationProvider"/>
+
+        <searcher forClass="com.intellij.find.usages.api.UsageSearchParameters"
+                  implementationClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolUsageSearcher"/>
     </extensions>
 
 </idea-plugin>
