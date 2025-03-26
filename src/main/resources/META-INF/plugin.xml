@@ -20,6 +20,8 @@
                 implementationClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolReferenceProvider"
                 targetClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbol"
                 referenceClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolReference"/>
+        <psi.declarationProvider
+                implementation="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolDeclarationProvider"/>
     </extensions>
 
 </idea-plugin>
