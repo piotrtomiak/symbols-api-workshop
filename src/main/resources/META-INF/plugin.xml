@@ -9,10 +9,10 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.piotrtomiak.symbolsapiworkshop.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <localInspection shortName="CYUnresolvedAlias" language="JavaScript" enabledByDefault="true"
+                         bundle="messages.MyBundle" key="cy.codeInsight.inspection.unresolvedAlias.name"
+                         groupKey="cy.codeInsight.inspection.group.name"
+                         implementationClass="com.github.piotrtomiak.symbolsapiworkshop.inspections.UnresolvedCypressAliasInspection"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.piotrtomiak.symbolsapiworkshop.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
 </idea-plugin>

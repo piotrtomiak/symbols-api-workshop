@@ -1,0 +1,12 @@
+.idea/
+node_modules
+package-lock.json
+
+**/*.js
+**/*.js.map
+!gen/browser/*.js
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+tests/**/*.received.json
