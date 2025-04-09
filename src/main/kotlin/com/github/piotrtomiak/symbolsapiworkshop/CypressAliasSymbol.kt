@@ -17,6 +17,8 @@ import com.intellij.psi.createSmartPointer
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.SearchScope
 import com.intellij.refactoring.rename.api.RenameTarget
+import com.intellij.refactoring.rename.api.RenameValidationResult
+import com.intellij.refactoring.rename.api.RenameValidator
 import com.intellij.webSymbols.utils.createPsiRangeNavigationItem
 
 data class CypressAliasSymbol(
@@ -46,8 +48,21 @@ data class CypressAliasSymbol(
             CypressAliasSymbol(name, declarationPtr.dereference() ?: return@Pointer null)
         }
     }
+
     override fun getNavigationTargets(project: Project): Collection<NavigationTarget> =
         listOf(MyNavigationTarget(this))
+
+    override fun validator(): RenameValidator = MyRenameValidator
+
+    private object MyRenameValidator : RenameValidator {
+        override fun validate(newName: String): RenameValidationResult =
+            if (newName.contains(" "))
+                RenameValidationResult.invalid("Spaces are not allowed")
+            else if (newName.contains("-"))
+                RenameValidationResult.warn("Better not to use dashes")
+            else
+                RenameValidationResult.ok()
+    }
 
     private class MyNavigationTarget(private val symbol: CypressAliasSymbol) : NavigationTarget {
         override fun createPointer(): Pointer<out NavigationTarget> {
