@@ -63,6 +63,20 @@ private fun findReferencesToSymbol(symbol: CypressAliasSymbol, leafOccurrence: L
         if (element !is PsiExternalReferenceHost)
             continue
 
+        val declarations = CypressAliasSymbolDeclarationProvider()
+            .getDeclarations(element, offsetInElement)
+        if (declarations.isNotEmpty()) {
+            return declarations
+                .filter { it.symbol == symbol }
+                .map {
+                    CypressSymbolPsiUsage(
+                        it.declaringElement.containingFile,
+                        it.absoluteRange,
+                        true
+                    )
+                }
+        }
+
         val foundReferences = symbolReferenceService
             .getReferences(element, PsiSymbolReferenceHints.offsetHint(offsetInElement))
             .asSequence()
