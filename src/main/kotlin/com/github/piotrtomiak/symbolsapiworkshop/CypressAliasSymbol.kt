@@ -16,15 +16,19 @@ import com.intellij.platform.backend.presentation.TargetPresentation
 import com.intellij.psi.createSmartPointer
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.SearchScope
+import com.intellij.refactoring.rename.api.RenameTarget
 import com.intellij.webSymbols.utils.createPsiRangeNavigationItem
 
 data class CypressAliasSymbol(
     val name: String,
     private val declaration: JSLiteralExpression,
-) : Symbol, SearchTarget, NavigatableSymbol {
+) : Symbol, SearchTarget, RenameTarget, NavigatableSymbol {
 
     override val usageHandler: UsageHandler
         get() = UsageHandler.createEmptyUsageHandler(name)
+
+    override val targetName: String
+        get() = name
 
     override val maximalSearchScope: SearchScope =
         computeScopeOfAliasDeclaration(declaration)?.let { LocalSearchScope(it) }

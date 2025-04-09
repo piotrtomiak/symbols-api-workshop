@@ -25,6 +25,8 @@
 
         <searcher forClass="com.intellij.find.usages.api.UsageSearchParameters"
                   implementationClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolUsageSearcher"/>
+        <searcher forClass="com.intellij.refactoring.rename.api.RenameUsageSearchParameters"
+                  implementationClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolRenameUsageSearcher"/>
     </extensions>
 
 </idea-plugin>
