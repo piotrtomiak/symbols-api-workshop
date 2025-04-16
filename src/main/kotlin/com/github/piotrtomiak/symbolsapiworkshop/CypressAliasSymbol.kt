@@ -5,7 +5,10 @@ package com.github.piotrtomiak.symbolsapiworkshop
 import com.intellij.find.usages.api.SearchTarget
 import com.intellij.find.usages.api.UsageHandler
 import com.intellij.icons.AllIcons
+import com.intellij.lang.javascript.psi.JSCallExpression
 import com.intellij.lang.javascript.psi.JSLiteralExpression
+import com.intellij.lang.javascript.psi.JSType
+import com.intellij.lang.javascript.psi.types.JSGenericTypeImpl
 import com.intellij.model.Pointer
 import com.intellij.model.Symbol
 import com.intellij.navigation.NavigatableSymbol
@@ -16,9 +19,11 @@ import com.intellij.platform.backend.presentation.TargetPresentation
 import com.intellij.psi.createSmartPointer
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.SearchScope
+import com.intellij.psi.util.parentsOfType
 import com.intellij.refactoring.rename.api.RenameTarget
 import com.intellij.refactoring.rename.api.RenameValidationResult
 import com.intellij.refactoring.rename.api.RenameValidator
+import com.intellij.util.asSafely
 import com.intellij.webSymbols.utils.createPsiRangeNavigationItem
 
 data class CypressAliasSymbol(
@@ -35,6 +40,17 @@ data class CypressAliasSymbol(
     override val maximalSearchScope: SearchScope =
         computeScopeOfAliasDeclaration(declaration)?.let { LocalSearchScope(it) }
             ?: LocalSearchScope.EMPTY
+
+    val type: JSType? by lazy {
+        declaration.parentsOfType<JSCallExpression>()
+            .firstOrNull()
+            ?.takeIf { it.isCypressChainedCall }
+            ?.qualifierType
+            ?.substitute()
+            ?.asSafely<JSGenericTypeImpl>()
+            ?.arguments
+            ?.firstOrNull()
+    }
 
     override fun presentation(): TargetPresentation =
         TargetPresentation.builder("Cypress Alias $name")

@@ -7,7 +7,7 @@ data class CypressAliasJSImplicitElement(
     val symbol: CypressAliasSymbol,
 ) : JSLocalImplicitElementImpl(
     symbol.name,
-    null,
+    symbol.type,
     symbol.declaration,
     JSImplicitElement.Type.Variable,
 )
