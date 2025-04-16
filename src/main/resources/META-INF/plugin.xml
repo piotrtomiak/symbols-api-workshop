@@ -29,6 +29,10 @@
         <psi.declarationProvider
                 implementation="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolDeclarationProvider"/>
 
+        <psi.referenceContributor
+                language="JavaScript"
+                implementation="com.github.piotrtomiak.symbolsapiworkshop.CypressPsiReferenceContributor"/>
+
         <searcher forClass="com.intellij.find.usages.api.UsageSearchParameters"
                   implementationClass="com.github.piotrtomiak.symbolsapiworkshop.CypressAliasSymbolUsageSearcher"/>
         <searcher forClass="com.intellij.refactoring.rename.api.RenameUsageSearchParameters"

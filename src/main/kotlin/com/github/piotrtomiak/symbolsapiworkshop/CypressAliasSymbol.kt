@@ -23,7 +23,7 @@ import com.intellij.webSymbols.utils.createPsiRangeNavigationItem
 
 data class CypressAliasSymbol(
     val name: String,
-    private val declaration: JSLiteralExpression,
+    internal val declaration: JSLiteralExpression,
 ) : Symbol, SearchTarget, RenameTarget, NavigatableSymbol {
 
     override val usageHandler: UsageHandler
